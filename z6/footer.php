@@ -1,0 +1,2 @@
+<?php declare(strict_types=1); ?>
+<footer class="page-footer mt-auto border-top"><div class="container d-flex flex-wrap align-items-center justify-content-between gap-2 py-3"><span>Dawid Michalak · Teleinformatyka</span><span id="sound-status" aria-live="polite"><svg id="sound-icon" width="22" height="22" viewBox="0 0 24 24" role="img" aria-label="Alarm włączony"><path d="M3 9H7L12 5V19L7 15H3Z M16 8Q21 12 16 16" fill="none" stroke="currentColor" stroke-width="2"/></svg> <span id="sound-label">Alarm włączony</span></span><a href="../">Powrót do listy zadań</a></div></footer>

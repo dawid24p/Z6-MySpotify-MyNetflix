@@ -1,0 +1,7 @@
+<?php declare(strict_types=1);require __DIR__.'/common.php';require_login();head('Netstat — usługi hostingu');
+echo '<p>Wąski test TCP: HTTP, HTTPS, MySQL i znany port SSH. Wynik dotyczy połączenia z hostingu; zamknięty lub filtrowany port nie oznacza braku usługi.</p>';
+require __DIR__.'/vendor/netstat-lib.php';
+$config=defaultConfig();$config['checks']=['127.0.0.1|80|Lokalny HTTP — 80','127.0.0.1|443|Lokalny HTTPS — 443','127.0.0.1|3306|Lokalny MySQL — 3306','srv126086.seohost.com.pl|80|Publiczny HTTP — 80','srv126086.seohost.com.pl|443|Publiczny HTTPS — 443','h92.seohost.pl|57185|SSH konta — 57185'];
+$config['htmlheader']='';$config['htmlfooter']='';$config['headline']='Wyniki testu portów';$config['datetime']='';$config['timeout']=0.4;$config['progressindicator']=false;$config['cachepath']=false;$config['cachetime']=0;$config['version']='';$config['alertfile']=__DIR__.'/brak-pliku-alertu';
+$_REQUEST['noprogress']='1';$argv=['netstat',''];ob_start();html(new cache('unused',$config));$out=ob_get_clean();echo $out;
+echo '<h2 class="h5 mt-4">Polecenie netstat na hostingu</h2><pre class="diagnostic-output">'.h(command_output('netstat -tuln')).'</pre><p><a href="https://github.com/netstat-php/netstat_php" target="_blank" rel="noopener noreferrer">Skrypt źródłowy: netstat-php (GPL)</a></p>';foot();

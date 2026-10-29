@@ -1,0 +1,1 @@
+<?php declare(strict_types=1);require __DIR__.'/common.php';diagnostics_page('Obciążenie serwera — top','TERM=xterm /usr/bin/top -b -n 1','Na hostingu współdzielonym wyniki mogą dotyczyć ograniczonego środowiska konta.');

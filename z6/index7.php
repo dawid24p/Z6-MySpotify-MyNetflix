@@ -1,0 +1,1 @@
+<?php declare(strict_types=1);require __DIR__.'/common.php';diagnostics_page('Whoami — użytkownik procesu PHP','whoami','To użytkownik serwera wykonujący PHP, nie osoba zalogowana w przeglądarce. Wynik nie zależy od zalogowania do panelu hostingu.');

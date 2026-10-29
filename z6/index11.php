@@ -1,0 +1,9 @@
+<?php declare(strict_types=1);require __DIR__.'/common.php';head('Moje IP i geolokalizacja');$ip=client_ip();$geo=ip_details($ip);
+echo '<section class="card mb-4"><div class="card-body"><h2 class="h5">IP: '.h($ip).'</h2>';
+if(isset($geo['error']))echo '<p>'.h($geo['error']).'</p>';else{foreach(['country'=>'Kraj','region'=>'Region','city'=>'Miasto','loc'=>'Współrzędne','provider'=>'Źródło'] as $key=>$label)echo '<p class="mb-1">'.h($label).': '.h((string)($geo[$key]??'')).'</p>';if(isset($geo['map']))echo '<a class="btn btn-primary mt-3" target="_blank" rel="noopener noreferrer" href="'.h($geo['map']).'">Google Maps</a>';}
+echo '</div></section><p class="text-body-secondary">To przybliżona lokalizacja IP, a nie GPS. VPN i sieć komórkowa mogą wskazywać inną miejscowość.</p><h2 class="h5">Przeglądarka i urządzenie</h2><table class="table" id="deviceInfo"><tbody>';
+foreach(['browser'=>'Przeglądarka','operating_system'=>'System','screen_width'=>'Szerokość ekranu (CSS px)','screen_height'=>'Wysokość ekranu (CSS px)','window_width'=>'Szerokość okna','window_height'=>'Wysokość okna','color_depth'=>'Głębia koloru (bity)','cookies_enabled'=>'Ciasteczka','java_enabled'=>'Aplety Java','language'=>'Język','pixel_ratio'=>'Współczynnik pikseli'] as $key=>$label)echo '<tr><th>'.h($label).'</th><td data-metric="'.h($key).'">Oczekiwanie na JavaScript</td></tr>';
+echo '</tbody></table>';
+if(ini_get('browscap')==='')echo '<p class="text-body-secondary">get_browser() na tym hostingu nie ma skonfigurowanej bazy browscap. Nazwę przeglądarki rozpoznaje biblioteka UAParser.js.</p>';
+else echo '<pre class="diagnostic-output">'.h(print_r(get_browser(null,true),true)).'</pre>';
+foot();

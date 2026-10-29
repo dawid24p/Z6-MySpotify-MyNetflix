@@ -1,0 +1,12 @@
+<?php declare(strict_types=1);require __DIR__.'/common.php';require_login();
+if(($_SERVER['REQUEST_METHOD']??'')==='POST'){
+ if(!is_geo_admin()||!isset($_SESSION['geo_csrf'])||!hash_equals($_SESSION['geo_csrf'],posted('csrf'))){http_response_code(403);exit('Brak uprawnień.');}
+ $enabled=posted('poland_only')==='1'?'1':'0';$d=visitor_db();$s=$d->prepare("UPDATE z6_settings SET value=? WHERE name='poland_only'");$s->bind_param('s',$enabled);$s->execute();$d->close();redirect('index13.php');
+}
+head('Statystyki adresów IP');$sort=($_GET['sort']??'count')==='ip'?'ipaddress ASC':'visits DESC,ipaddress ASC';$d=visitor_db();
+$rows=$d->query("SELECT ipaddress,SUM(event_type='visit') AS visits,SUM(event_type='login') AS logins,MAX(datetime) AS last_visit FROM z6_goscieportalu GROUP BY ipaddress ORDER BY ".$sort.' LIMIT 50');
+echo '<h2 class="h5">Unikalne IP i liczba wejść</h2><p><a class="btn btn-outline-primary" href="index13.php?sort=ip">Według IP</a> <a class="btn btn-outline-primary" href="index13.php?sort=count">Według liczby wejść</a></p><div class="table-responsive"><table class="table"><thead><tr><th>IP</th><th>Liczba wejść</th><th>Logowania</th><th>Ostatnia aktywność (Warszawa)</th></tr></thead><tbody>';
+foreach($rows as $r){$date=(new DateTimeImmutable($r['last_visit'],new DateTimeZone('UTC')))->setTimezone(new DateTimeZone('Europe/Warsaw'))->format('Y-m-d H:i:s');echo '<tr><td>'.h($r['ipaddress']).'</td><td>'.(int)$r['visits'].'</td><td>'.(int)$r['logins'].'</td><td>'.h($date).'</td></tr>';}echo '</tbody></table></div>';$d->close();
+$enabled=geo_policy_enabled();echo '<h2 class="h5 mt-4">Logowanie tylko z Polski</h2><p>Blokada: <strong>'.($enabled?'włączona':'wyłączona').'</strong>. Włączona blokada odrzuca IP spoza Polski oraz IP bez rozpoznanego kraju.</p>';
+if(is_geo_admin())echo '<form method="post"><input type="hidden" name="csrf" value="'.h($_SESSION['geo_csrf']).'"><div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="poland_only" name="poland_only" value="1" '.($enabled?'checked':'').'><label class="form-check-label" for="poland_only">Blokuj logowanie spoza Polski</label></div><button class="btn btn-primary">Zapisz ustawienie</button></form>';else echo '<p class="text-body-secondary">Ustawienie może zmienić właściciel portalu — Dawid24p.</p>';
+foot();

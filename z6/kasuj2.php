@@ -1,0 +1,1 @@
+<?php require __DIR__.'/common.php';$u=monitor_user();monitor_post();$id=(int)posted('id');$d=db();if(monitor_admin($u)){$s=$d->prepare('DELETE FROM z6_domeny WHERE id=?');$s->bind_param('i',$id);}else{$s=$d->prepare('DELETE FROM z6_domeny WHERE id=? AND user_id=?');$s->bind_param('ii',$id,$u['id']);}$s->execute();$d->close();redirect('monitor.php');

@@ -1,0 +1,1 @@
+<?php require __DIR__.'/common.php';require_login();head('Test połączenia TCP');[$ok,$detail]=monitor_probe('srv126086.seohost.com.pl',80);echo '<div class="alert '.($ok?'alert-success':'alert-danger').'">Host srv126086.seohost.com.pl:80 jest: '.($ok?'OK':'Awaria').'<br>'.h($detail).'</div>';foot();
